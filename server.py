@@ -20,19 +20,15 @@ def lat_lng_amount(websocket, path):
     yield from blockchain_websocket.send(connection_text)
 
     while True:
-        message = yield from websocket.recv()
-        if message is None:
-            break
-
         resp = yield from blockchain_websocket.recv()
         resp_dict = json.loads(resp)
         ip_address = resp_dict['x']['relayed_by']
         amount = BLOCKCHAIN_SCALING * sum([t['value'] for t in resp_dict['x']['out']])
-        logger.debug(pprint.pformat(resp_dict))
-        logger.debug("IP: {0}, amount: {1} BTC".format(ip_address, amount))
+        pprint.pprint(resp_dict)
+        print("IP: {0}, amount: {1} BTC".format(ip_address, amount))
 
         location = yield from geolocate_ip(ip_address)
-        logger.debug(pprint.pformat(location))
+        pprint.pprint(location)
         if location['status'] != 'success':
             continue
 
@@ -41,7 +37,8 @@ def lat_lng_amount(websocket, path):
             lng=location['lon'],
             amount=amount
         )
-        websocket.send(json.dumps(payload))
+        pprint.pprint(payload)
+        yield from websocket.send(json.dumps(payload))
 
 
 @asyncio.coroutine
