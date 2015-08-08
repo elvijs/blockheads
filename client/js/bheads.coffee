@@ -8,8 +8,8 @@ $ ->
     maxZoom: 18
   }).addTo(map)
 
-  ws = new WebSocket 'wss://localhost'
+  ws = new WebSocket 'ws://localhost:8765'
   ws.onmessage = (e) ->
-    tx = JSON.parse e.data
-    console.log tx
-    L.marker([tx.lat, tx.lon]).addTo(map)
+    loc = JSON.parse e.data
+    console.log loc
+    L.marker([loc.lat, loc.lng]).addTo(map)
