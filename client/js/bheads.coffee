@@ -1,7 +1,7 @@
 locs = new Set()
 
 cfg =
-  "radius": 5,
+  "radius": 7,
   "maxOpacity": .8,
   "scaleRadius": true,
   "useLocalExtrema": true,
@@ -11,11 +11,10 @@ cfg =
 
 heatmapLayer = new HeatmapOverlay(cfg)
 
-window.locs = locs
-
 redraw = ->
   data = (Array.from locs).map (loc) ->
-    {lat: loc.lat, lng: loc.lng, count: 0.3}
+    amount = Math.log(loc.amount + 3);
+    {lat: loc.lat, lng: loc.lng, count: amount}
   heatmapLayer.setData({data: data})
 
 add_loc = (loc) ->
@@ -24,7 +23,7 @@ add_loc = (loc) ->
   setTimeout ->
     locs.delete loc
     redraw()
-  , 6000
+  , 50000
 
 $ ->
   tileLayer = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
