@@ -2,7 +2,7 @@
  * heatmap.js v2.0.1 | JavaScript Heatmap Library
  *
  * Copyright 2008-2014 Patrick Wied <heatmapjs@patrick-wied.at> - All rights reserved.
- * Dual licensed under MIT and Beerware license 
+ * Dual licensed under MIT and Beerware license
  *
  * :: 2015-07-21 01:00
  */
@@ -29,7 +29,7 @@ var HeatmapConfig = {
   defaultBlur: .85,
   defaultXField: 'x',
   defaultYField: 'y',
-  defaultValueField: 'value', 
+  defaultValueField: 'value',
   plugins: {}
 };
 var Store = (function StoreClosure() {
@@ -77,19 +77,19 @@ var Store = (function StoreClosure() {
 
         if (store[x][y] > max) {
           if (!forceRender) {
-            this._max = store[x][y];
+            //this._max = store[x][y];
           } else {
             this.setDataMax(store[x][y]);
           }
           return false;
         } else{
-          return { 
-            x: x, 
+          return {
+            x: x,
             y: y,
-            value: value, 
+            value: value,
             radius: radius,
             min: min,
-            max: max 
+            max: max
           };
         }
     },
@@ -130,7 +130,7 @@ var Store = (function StoreClosure() {
           this.addData.call(this, dataArr[dataLen]);
         }
       } else {
-        // add to store  
+        // add to store
         var organisedEntry = this._organiseData(arguments[0], true);
         if (organisedEntry) {
           this._coordinator.emit('renderpartial', {
@@ -154,9 +154,9 @@ var Store = (function StoreClosure() {
       for(var i = 0; i < pointsLen; i++) {
         this._organiseData(dataPoints[i], false);
       }
-      this._max = data.max;
+      //this._max = data.max;
       this._min = data.min || 0;
-      
+
       this._onExtremaChange();
       this._coordinator.emit('renderall', this._getInternalData());
       return this;
@@ -180,11 +180,11 @@ var Store = (function StoreClosure() {
       this._coordinator = coordinator;
     },
     _getInternalData: function() {
-      return { 
+      return {
         max: this._max,
-        min: this._min, 
+        min: this._min,
         data: this._data,
-        radi: this._radi 
+        radi: this._radi
       };
     },
     getData: function() {
@@ -218,7 +218,7 @@ var Store = (function StoreClosure() {
                 }
               } else {
                 continue;
-              } 
+              }
             }
           }
         }
@@ -235,7 +235,7 @@ var Store = (function StoreClosure() {
 })();
 
 var Canvas2dRenderer = (function Canvas2dRendererClosure() {
-  
+
   var _getColorPalette = function(config) {
     var gradientConfig = config.gradient || config.defaultGradient;
     var paletteCanvas = document.createElement('canvas');
@@ -274,8 +274,8 @@ var Canvas2dRenderer = (function Canvas2dRendererClosure() {
       tplCtx.fillStyle = gradient;
       tplCtx.fillRect(0, 0, 2*radius, 2*radius);
     }
-    
-    
+
+
 
     return tplCanvas;
   };
@@ -286,7 +286,7 @@ var Canvas2dRenderer = (function Canvas2dRendererClosure() {
     var max = data.max;
     var radi = data.radi;
     var data = data.data;
-    
+
     var xValues = Object.keys(data);
     var xValuesLen = xValues.length;
 
@@ -427,7 +427,7 @@ var Canvas2dRenderer = (function Canvas2dRendererClosure() {
         // update renderBoundaries
         if (rectX < this._renderBoundaries[0]) {
             this._renderBoundaries[0] = rectX;
-          } 
+          }
           if (rectY < this._renderBoundaries[1]) {
             this._renderBoundaries[1] = rectY;
           }
