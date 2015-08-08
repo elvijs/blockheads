@@ -4,7 +4,7 @@ $ ->
   })
 
   cfg =
-    "radius": 5,
+    "radius": 4,
     "maxOpacity": .8,
     "scaleRadius": true,
     "useLocalExtrema": true,
@@ -25,4 +25,6 @@ $ ->
     loc = JSON.parse e.data
     console.log loc
     # L.marker([loc.lat, loc.lng]).addTo(map)
-    heatmapLayer.addData([{lat: loc.lat, lng: loc.lng, count: 1}])
+    amount = Math.log(loc.amount + 3);
+
+    heatmapLayer.addData([{lat: loc.lat, lng: loc.lng, count: amount}])
