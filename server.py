@@ -11,11 +11,21 @@ loop = asyncio.get_event_loop()
 BLOCKCHAIN_SCALING = 10 ** (-9)
 BLOCKCHAIN_URL = "wss://ws.blockchain.info/inv"
 
+clients = []
+
 
 @asyncio.coroutine
-def lat_lng_amount(websocket, path):
+def add_client(websocket, path):
+    print("new connection made from {}".format(path))
+    clients.append(websocket)
+    while True:
+        yield
+
+
+@asyncio.coroutine
+def get_transactions():
     blockchain_websocket = yield from websockets.connect(BLOCKCHAIN_URL)
-    logger.warn("connecting to {}".format(BLOCKCHAIN_URL))
+    print("connecting to {}".format(BLOCKCHAIN_URL))
     connection_text = '{"op": "unconfirmed_sub"}'
     yield from blockchain_websocket.send(connection_text)
 
@@ -38,7 +48,10 @@ def lat_lng_amount(websocket, path):
             amount=amount
         )
         pprint.pprint(payload)
-        yield from websocket.send(json.dumps(payload))
+
+        for client in clients:
+            if client and client.open:
+                yield from client.send(json.dumps(payload))
 
 
 @asyncio.coroutine
@@ -50,6 +63,7 @@ def geolocate_ip(location_string):
     return json.loads(body.decode('utf-8'))
 
 
-start_server = websockets.serve(lat_lng_amount, 'localhost', 8765)
+start_server = websockets.serve(add_client, 'localhost', 8765)
 loop.run_until_complete(start_server)
+loop.run_until_complete(get_transactions())
 loop.run_forever()
