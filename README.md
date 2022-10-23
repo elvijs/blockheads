@@ -1,2 +1,2 @@
 # blockheads
-Sexytime with Bitcoinzzzz
+Playing around with Bitcoin APIs
